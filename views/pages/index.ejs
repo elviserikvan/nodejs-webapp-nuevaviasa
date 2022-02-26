@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<title>Panaderia Nueva Viasa</title>
+		<%- include('../partials/head'); %>
+		<link rel="stylesheet" href="/css/index.css" media="all">
+	</head>
+
+	<body>
+		<div class="container d-flex flex-column justify-content-between">
+			<header>
+				    <%- include('../partials/header'); %>
+			</header>
+
+			<main class="content text-center">
+				<h1>panaderia nueva viasa</h1>
+				<p>el mejor directo desde el horno hasta tu boca</p>
+				<a href="/login" class="btn btn-warning btn-lg" role="button">iniciar sesion</a>
+			</main>
+
+			<footer>
+				    <%- include('../partials/footer'); %>
+			</footer>
+		</div>
+
+		<script>
+			const menu = document.getElementById('menu_nav');
+			menu.classList.remove('navbar-light')
+			menu.classList.add('navbar-dark')
+		</script>
+
+	</body>
+</html>

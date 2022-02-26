@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Dashboard</title>
+	<%- include('../partials/head') %>
+	<link rel="stylesheet" href="/css/dashboard.css" media="all">
+	<style>
+		html, body, .container {
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content text-center text-left">
+
+			<div class="top_table d-flex justify-content-between align-items-center mt-5 mb-3">
+				<p>Precio del dolar: 1$ = 5Bs.f</p>
+
+				<div class="btn-group">
+					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Opciones
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#">Añadir Nuevo</a>
+						<a class="dropdown-item" href="#">Exportar a PDF</a>
+					</div>
+				</div>
+			</div>
+
+			<table class="table text-left">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nombre</th>
+						<th scope="col">Precio Bolivares</th>
+						<th scope="col">Precio Dolares</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>Mayonesa</td>
+						<td>20</td>
+						<td>5</td>
+						<td>
+							<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									...
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="#">Eliminar</a>
+									<a class="dropdown-item" href="#">Modificar</a>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>Mantequilla</td>
+						<td>20</td>
+						<td>5</td>
+						<td>
+							<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									...
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="#">Eliminar</a>
+									<a class="dropdown-item" href="#">Modificar</a>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>Acaite</td>
+						<td>20</td>
+						<td>5</td>
+						<td>
+							<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									...
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="#">Eliminar</a>
+									<a class="dropdown-item" href="#">Modificar</a>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+
+</body>
+</html>

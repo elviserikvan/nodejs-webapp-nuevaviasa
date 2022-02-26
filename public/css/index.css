@@ -1,0 +1,26 @@
+html, body, .container {
+	height: 100%;
+}
+
+body {
+	background-image: url("/images/bread.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+
+	color: #fff;
+}
+
+.content {
+	width: 100%;
+} 
+
+.content h1 {
+	font-size: 40pt;
+	font-weight: bold;
+	margin-bottom: 50px;
+}
+.content p {
+	font-weight: bold;
+	font-size: 15pt;
+}

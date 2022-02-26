@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Exportar todo a PDF</title>
+	<%- include('../partials/head') %>
+	<link rel="stylesheet" href="/css/login.css" media="all">
+</head>
+<body>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content text-center text-left">
+			<h2 class="mb-5">Exportar a PDF</h2>
+			<p class="m-auto my-4" style="max-width:70%;">Al precionar el siguiente boton todos los productos que esten actualmente añadidos a la base de datos seran listados en una tabla en PDF para poder ser impreso en el futuro</p>
+
+			<button class="btn btn-danger mt-4">Exportar a PDF</button>
+
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+
+</body>
+</html>
