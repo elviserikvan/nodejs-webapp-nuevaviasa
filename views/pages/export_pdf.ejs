@@ -31,14 +31,21 @@
 						<th scope="col">Creador</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="reports_table_body">
+					<% reports.forEach(report => { %>
+						<tr>
+							<!-- <th scope="row">1</th> -->
+							<td><a href="/pdf/<%= report.name %>"><%= report.name %></a></td>
+							<td><%= report.created_at %></td>
+							<td><%= report.username %></td>
+						</tr>
+					<% }) %>
+					<!-- 
 					<tr>
-						<!-- <th scope="row">1</th> -->
 						<td><a href="#">report-2022-03-6.pdf</a></td>
 						<td>2022/03/6</td>
 						<td>Administrador</td>
 					</tr>
-					<!-- 
 					<tr>
 						<th scope="row">2</th>
 						<td>Jacob</td>

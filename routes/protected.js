@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../models/Database.js');
 const router = require("express").Router();
+const PDFDocument = require('pdfkit');
 
 
 
@@ -128,20 +129,44 @@ router.get("/add", (req, res) => {
 })
 
 router.get("/exportpdf", (req, res) => {
-	res.render("pages/export_pdf", {user: req.user})
+
+	let sql = 'SELECT pdf.id, name, created_at, username FROM pdf INNER JOIN users ON pdf.user_id = users.id';
+	db.all(sql, [], (err, row) => {
+		if(err) console.error(err);
+
+	//	console.log(row);
+		res.render("pages/export_pdf", {user: req.user, reports: row});
+	})
+
 })
 
 router.get("/new_pdf", (req, res) => {
 
 	let file_path = path.join(__dirname, '../public/pdf/'); // Path to create the new file
-	let date = new Date().toISOString().split('T')[0].replace(/-/g,'/'); // Taking the current date and format it as a string
+	let date = new Date().toISOString().split('T')[0]; // Taking the current date and format it as a string
+	//let date = new Date().toISOString().split('T')[0].replace(/-/g,'/'); // Taking the current date and format it as a string
 	let filename = `export_${date}.pdf`; // Filename
 
+	const doc = new PDFDocument();
+	doc.pipe(fs.createWriteStream(`${file_path}${filename}`));
 
-	console.log(`${file_path}${filename}`);
 
-	res.json({data: 'Nojoda Carajo'});
-	
+	// Format the PDF
+	doc.fontSize(25).text("TProductos en la base de datos");
+	doc.text("4 x Mayonesa $000");
+	doc.end();
+
+	let sql = 'INSERT INTO pdf (name, created_at, user_id) VALUES (?, ?, ?)';
+	let params = [filename, date, req.user.id];
+
+	db.all(sql, params, (err, row) => {
+		if (err) {
+			return res.json({error: true});
+		}	
+
+
+		return res.json({error: false, name: filename, date: date,  user: req.user.username});
+	})
 })
 
 
