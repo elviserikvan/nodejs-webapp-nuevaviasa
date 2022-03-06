@@ -3,7 +3,7 @@
 <head>
 	<title>Dashboard</title>
 	<%- include('../partials/head') %>
-	<link rel="stylesheet" href="/css/dashboard.css" media="all">
+	<!-- <link rel="stylesheet" href="/css/dashboard.css" media="all"> -->
 	<style>
 		html, body, .container {
 			height: 100%;
@@ -21,15 +21,15 @@
 		<main class="content text-center text-left">
 
 			<div class="top_table d-flex justify-content-between align-items-center mt-5 mb-3">
-				<p>Precio del dolar: 1$ = 5Bs.f</p>
+				<p>Precio del dolar: 1$ = <%= dolar_price.value %>Bs.f</p>
 
 				<div class="btn-group">
 					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Opciones
 					</button>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Añadir Nuevo</a>
-						<a class="dropdown-item" href="#">Exportar a PDF</a>
+						<a class="dropdown-item" href="/member/add">Añadir Nuevo</a>
+						<a class="dropdown-item" href="/member/exportpdf">Exportar a PDF</a>
 					</div>
 				</div>
 			</div>
@@ -45,6 +45,27 @@
 					</tr>
 				</thead>
 				<tbody>
+					<% products.forEach(row => {  %>
+
+						<tr>
+							<th scope="row"><%= row.id %></th>
+							<td><%= row.name %></td>
+							<td><%= row.precio %></td>
+							<td><%= row.price %></td>
+							<td>
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										...
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<a class="dropdown-item" href="/member/delete/<%= row.id %>">Eliminar</a>
+										<a class="dropdown-item" href="/member/modificar/<%= row.id %>">Modificar</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+
+					<% }) %>
 					<tr>
 						<th scope="row">1</th>
 						<td>Mayonesa</td>
