@@ -6,6 +6,9 @@ const PDFDocument = require('pdfkit');
 
 
 
+
+
+
 // Middleware to only allow authenticated users
 router.use((req, res, next) => {
 	if(req.isAuthenticated()) { return next() }
@@ -142,31 +145,54 @@ router.get("/exportpdf", (req, res) => {
 
 router.get("/new_pdf", (req, res) => {
 
-	let file_path = path.join(__dirname, '../public/pdf/'); // Path to create the new file
-	let date = new Date().toISOString().split('T')[0]; // Taking the current date and format it as a string
-	//let date = new Date().toISOString().split('T')[0].replace(/-/g,'/'); // Taking the current date and format it as a string
-	let filename = `export_${date}.pdf`; // Filename
-
-	const doc = new PDFDocument();
-	doc.pipe(fs.createWriteStream(`${file_path}${filename}`));
+	let file_path = path.join(__dirname, '../public/pdf/'); 
+	let date = new Date().toISOString().split('T')[0]; 
+	let filename = `export_${date}.pdf`;
 
 
-	// Format the PDF
-	doc.fontSize(25).text("TProductos en la base de datos");
-	doc.text("4 x Mayonesa $000");
-	doc.end();
-
-	let sql = 'INSERT INTO pdf (name, created_at, user_id) VALUES (?, ?, ?)';
-	let params = [filename, date, req.user.id];
-
-	db.all(sql, params, (err, row) => {
+	// Get products from database
+	let sql_products = "SELECT name, amount, price, username FROM products INNER JOIN users ON products.user_id = users.id";
+	db.all(sql_products, [], (err, rows) => {
 		if (err) {
 			return res.json({error: true});
 		}	
 
 
-		return res.json({error: false, name: filename, date: date,  user: req.user.username});
+		// Create the PDF
+		const doc = new PDFDocument();
+		doc.pipe(fs.createWriteStream(`${file_path}${filename}`));
+
+
+		doc.fontSize(25).text("Productos en la base de datos");
+		doc.moveDown();
+
+		rows.forEach(row => {
+			doc.fontSize(12).text(`${row.amount} x ${row.name} $${row.price} - ${row.username}`);
+			doc.moveDown();
+		})
+		
+		/*
+		for(let i = 0; i <= 100; i++) {
+			doc.fontSize(12).text(`4 x product #${i} $00 - Admin`);
+		}
+		doc.fontSize(12).text("2 x Noijoda $000");
+		*/
+
+		doc.end();
+
+		/* Insertar el nuevo reporte en la base de datos */
+		let sql = 'INSERT INTO pdf (name, created_at, user_id) VALUES (?, ?, ?)';
+		let params = [filename, date, req.user.id];
+
+		db.all(sql, params, (err, row) => {
+			if (err) {
+				return res.json({error: true});
+			}	
+
+			return res.json({error: false, name: filename, date: date,  user: req.user.username});
+		})
 	})
+
 })
 
 
@@ -194,8 +220,8 @@ router.post('/add', (req, res) => {
 
 
 	// Guardar en la base de datos
-	let sql = 'INSERT INTO products (name, price, amount, description) VALUES (?, ?, ?, ?)';
-	let params = [name, price, amount, description];
+	let sql = 'INSERT INTO products (name, price, amount, description, user_id) VALUES (?, ?, ?, ?, ?)';
+	let params = [name, price, amount, description, req.user.id];
 
 	db.all(sql, params, (err, row) => {
 		if (err) {
