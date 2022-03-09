@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require("bcrypt");
 const db = require('../models/Database.js');
 const router = require("express").Router();
 const PDFDocument = require('pdfkit');
@@ -19,6 +20,9 @@ router.use((req, res, next) => {
 router.get("/", (req, res) => {
 	res.send("No content")
 })
+
+
+router.get('/settings', (req, res) => { res.render('pages/settings', {user: req.user}); })
 
 
 router.get("/logout", (req, res) => {
@@ -193,6 +197,43 @@ router.get("/new_pdf", (req, res) => {
 		})
 	})
 
+})
+
+
+router.get('/add_user', (req, res) => {
+	res.render('pages/ass_user', {user: req.user});
+})
+
+router.post('/add_user', (req, res) => {
+	console.log(req.body);
+
+	let {name, lastname, username, password, role, email} = req.body;
+	let date = new Date().toISOString().split('T')[0];
+console.log(date);
+	let salt = bcrypt.genSaltSync(10);
+	let hash = bcrypt.hashSync(password, salt);
+
+	let sql = "INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	let params = [name, lastname, username, email, hash, date, role];
+
+	db.run(sql, params, (err) => {
+		if(err) {
+			console.error(err);
+			req.flash("error", 'Ocurrio un error agregando un nuevo usuario');
+			return res.redirect("add_user");
+		}		
+
+
+		req.flash("success", 'Usuario guardado con excito');
+		return res.redirect("add_user");
+	});
+
+})
+
+
+router.get('/new_db_backup', (req, res) => {
+	db.run("'.dump'");
+	res.json({data: 'nojoda'});
 })
 
 

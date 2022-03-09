@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Añadir nuevo Producto</title>
+	<%- include('../partials/head') %>
+	<link rel="stylesheet" href="/css/login.css" media="all">
+</head>
+<body>
+	<% if(messages.error) { %>
+		<%= messages.error  %>
+	<% } %>
+
+	<% if(messages.success) { %>
+		<%= messages.success  %>
+	<% } %>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content text-center text-left">
+
+			<h2 class="my-4">Añadir nuevo usuario</h2>
+
+			<form method="POST" action="/member/add_user" class="col-8 m-auto">
+				<div class="form-group">
+					<label for="name_input">Nombre</label>
+					<input type="text" name="name" class="form-control" id="name_input" aria-describedby="emailHelp" placeholder="Nombre">
+				</div>
+
+				<div class="form-group my-5">
+					<label for="lastname_input">Apellido</label>
+					<input type="text"  name="lastname" class="form-control" id="lastname_input" placeholder="Apellido">
+				</div>
+
+				<div class="form-group my-5">
+					<label for="username_input">Usuario</label>
+					<input type="text" name="username" class="form-control" id="username_input"  placeholder="Username">
+				</div>
+
+				<div class="form-group my-5">
+					<label for="email_input">Email</label>
+					<input type="text" name="email" class="form-control" id="email_input"  placeholder="Email">
+				</div>
+
+				<div class="form-group my-5">
+					<label for="password_input">contraseña</label>
+					<input type="password" name="password" class="form-control" id="password_input" placeholder="Contraseña">
+				</div>
+
+				<div class="form-group my-5">
+
+					<label for="role_input">Role</label>
+					<select name="role" id="role_input" class="form-control form-control-sm">
+						  <option value="username">Usuario</option>
+						  <option value="admin">Administrador</option>
+					</select>
+
+				</div>
+
+				<button type="submit" class="btn btn-primary my-5">Guardar</button>
+
+			</form>
+
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+
+</body>
+</html>
