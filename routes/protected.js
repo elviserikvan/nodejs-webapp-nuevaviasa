@@ -22,7 +22,29 @@ router.get("/", (req, res) => {
 })
 
 
-router.get('/settings', (req, res) => { res.render('pages/settings', {user: req.user}); })
+router.get('/settings', (req, res) => {
+
+	sql = 'SELECT value FROM settings WHERE name = "dolar_price"';
+	db.get(sql, [], (erro, row) => {
+		res.render('pages/settings', {user: req.user, dolar_price: row.value});
+	});
+})
+
+router.post("/update_dolar_price", (req, res) => {
+	console.log(req.body);
+
+	let sql = `UPDATE settings SET value = ? WHERE name = "dolar_price"`;
+	db.run(sql, [req.body.dolar_price], (err) => {
+		if(err) {
+			console.error(err);
+			req.flash("error", "Ocurrio un error al momento de actualizar el precio del dolar");
+			return res.redirect('settings');
+		}
+
+		req.flash("success", "Precio del dolar actualizado");
+		return res.redirect('settings');
+	})
+});
 
 
 router.get("/logout", (req, res) => {
@@ -205,11 +227,10 @@ router.get('/add_user', (req, res) => {
 })
 
 router.post('/add_user', (req, res) => {
-	console.log(req.body);
 
 	let {name, lastname, username, password, role, email} = req.body;
 	let date = new Date().toISOString().split('T')[0];
-console.log(date);
+
 	let salt = bcrypt.genSaltSync(10);
 	let hash = bcrypt.hashSync(password, salt);
 
