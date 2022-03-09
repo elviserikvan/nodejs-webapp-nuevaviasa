@@ -22,6 +22,10 @@ router.get("/", (req, res) => {
 })
 
 
+router.get("/ayuda", (req, res) => {
+	res.render("pages/ayuda", {user: req.user});
+})
+
 router.get('/settings', (req, res) => {
 
 	sql = 'SELECT value FROM settings WHERE name = "dolar_price"';
