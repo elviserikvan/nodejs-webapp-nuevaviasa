@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Ayuda</title>
+	<%- include('../partials/head') %>
+	<style>
+		html, body, .container {
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content text-center text-left">
+
+<div class="accordion" id="accordionExample">
+
+			<!-- First card -->
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							¿Como añadir nuevos productos?
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+						<ul class="text-left">
+							<li>Ir al <a href="/member/dashboard">dashboard</a> </li>
+							<li>Dar click en el boton añadir nuevo</li>
+							<li>Rellenar el formulario y dar click en el boton Guardar</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- First card -->
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+							¿Como modificar un producto?
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+						<ul class="text-left">
+							<li>Ir al <a href="/member/dashboard">dashboard</a> </li>
+							<li>Ubicar el producto que deseas modificar</li>
+							<li>Dar click en el los 3 puntos (...) que aparece al final de cada boton</li>
+							<li>Dar click en el boton modificar</li>
+							<li>Rellenar el formulario y dar click en el boton guardar</li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- First card -->
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+							¿Como eliminar un producto?
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+						<ul class="text-left">
+							<li>Ir al <a href="/member/dashboard">dashboard</a> </li>
+							<li>Ubicar el producto que deseas eliminar </li>
+							<li>Dar click en el los 3 puntos (...) que aparece al final de cada boton</li>
+							<li>Dar click en el boton eliminar </li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+
+
+			<!-- First card -->
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+							¿Como añadir un nuevo usuario?
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+						<ul class="text-left">
+							<li>Este proceso solo puede ser realizado por los administradores</li>
+							<li>Ir a la seccion configuraciones </li>
+							<li>Dar click en el boton añadir nuevo usuario </li>
+							<li>Rellenar el formulario y dar click en guardar</li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- First card -->
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+							¿Modificar el precio del dolar?
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+						<ul class="text-left">
+							<li>Ir a la seccion configuraciones </li>
+							<li>Cambar el precio del dolar en la casilla 'Precio del dolar' </li>
+							<li>Dar click en el boton guardar</li>
+						</ul> 
+					</div>
+				</div>
+			</div>
+</div>
+
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+
+</body>
+</html>
