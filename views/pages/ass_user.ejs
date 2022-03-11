@@ -6,14 +6,6 @@
 	<link rel="stylesheet" href="/css/login.css" media="all">
 </head>
 <body>
-	<% if(messages.error) { %>
-		<%= messages.error  %>
-	<% } %>
-
-	<% if(messages.success) { %>
-		<%= messages.success  %>
-	<% } %>
-
 	<div class="container d-flex flex-column justify-content-between">
 	
 		<header>
@@ -23,6 +15,8 @@
 		<main class="content text-center text-left">
 
 			<h2 class="my-4">Añadir nuevo usuario</h2>
+
+			<%- include('../partials/alerts') %>
 
 			<form method="POST" action="/member/add_user" class="col-8 m-auto">
 				<div class="form-group">

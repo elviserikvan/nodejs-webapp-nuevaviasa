@@ -6,10 +6,6 @@ const router = require("express").Router();
 const PDFDocument = require('pdfkit');
 
 
-
-
-
-
 // Middleware to only allow authenticated users
 router.use((req, res, next) => {
 	if(req.isAuthenticated()) { return next() }
@@ -26,6 +22,12 @@ router.get("/ayuda", (req, res) => {
 	res.render("pages/ayuda", {user: req.user});
 })
 
+
+router.get("/logout", (req, res) => {
+	req.logout();
+	res.redirect("/");
+})
+
 router.get('/settings', (req, res) => {
 
 	sql = 'SELECT value FROM settings WHERE name = "dolar_price"';
@@ -35,7 +37,19 @@ router.get('/settings', (req, res) => {
 })
 
 router.post("/update_dolar_price", (req, res) => {
-	console.log(req.body);
+
+	// Check if empty
+	if(req.body.dolar_price == '') {
+		req.flash("error", "El precio del dolar no puede estar en blanco");
+		return res.redirect('settings');
+	}
+
+	// Check if not a number
+	let price = parseInt(req.body.dolar_price);
+	if(isNaN(price)){
+		req.flash("error", "El precio del dolar tiene que ser un numero");
+		return res.redirect('settings');
+	}
 
 	let sql = `UPDATE settings SET value = ? WHERE name = "dolar_price"`;
 	db.run(sql, [req.body.dolar_price], (err) => {
@@ -51,10 +65,6 @@ router.post("/update_dolar_price", (req, res) => {
 });
 
 
-router.get("/logout", (req, res) => {
-	req.logout();
-	res.redirect("/");
-})
 
 router.get("/dashboard", (req, res) => {
 	
@@ -71,7 +81,7 @@ router.get("/dashboard", (req, res) => {
 		db.all(sql, params, (err, rows) => {
 
 			rows.forEach((row) => {
-				row.precio = row.price * dolar_price.value;
+				row.precio = (row.price * dolar_price.value).toFixed(2);
 			})
 
 
@@ -90,35 +100,58 @@ router.get("/delete/:id", (req, res) => {
 	let params = [req.params.id];
 
 	db.all(sql, params, (err, row) => {
-		if (err) console.log(err);
+		if (err) { 
+			console.log(err);  
+
+			req.flash("error", `Ocurrio un error al momento de eliminar este producto`);
+			return res.redirect("/member/dashboard");
+
+		}
+
+		req.flash("success", `Producto eliminado`);
 		return res.redirect("/member/dashboard");
 	})
 })
 
 router.get("/modificar/:id", (req, res) => {
-	console.log(req.params.id)
 
 	let sql = 'SELECT * FROM products WHERE id = ?';
 	let params = [req.params.id];
 
 	db.get(sql, params, (err, row) => {
-		if (err) console.error(err);
-		console.log(row);
 
-		res.render("pages/modify_products", {user: req.user, product: row})
+		if (err || row == undefined) {
+			console.error(err);
+
+			req.flash("error", `Ocurrio un error al momento de editar este producto`);
+			return res.redirect(`/member/dashboard`);
+		}else {
+			
+			res.render("pages/modify_products", {user: req.user, product: row})
+		}
+
 	})
  
 })
 
 router.post("/modificar/:id", (req, res) => {
-	/*
-	console.log(req.body)	
-	res.redirect("/member/dashboard");
-	*/
 
 	let {name, price, amount, description } = req.body;
 	price = parseInt(price);
 	amount = parseInt(amount);
+
+	//check_if_inputs_are_empty(req, res,`/member/modificar/${req.params.id}`);
+	
+	// Check if any input is empty
+	for(key in req.body) {
+
+		if(req.body[key] == "") {
+			
+			req.flash("error", `Ningun campo puede estar vacio`);
+			return res.redirect(`/member/modificar/${req.params.id}`);
+		}
+
+	}
 
 	// check price
 	if(isNaN(price)) {
@@ -175,9 +208,34 @@ router.get("/exportpdf", (req, res) => {
 
 router.get("/new_pdf", (req, res) => {
 
-	let file_path = path.join(__dirname, '../public/pdf/'); 
-	let date = new Date().toISOString().split('T')[0]; 
-	let filename = `export_${date}.pdf`;
+	var file_path = path.join(__dirname, '../public/pdf/'); 
+	var date = new Date().toISOString().split('T')[0]; 
+	var filename = `export_${date}.pdf`;
+
+	// Check of filename already exists
+	try {
+		if(fs.existsSync(`${file_path}${filename}`)) {
+			// File already exists
+
+			date = new Date().toISOString().split('T')[0]; 
+			for(i = 0; i <= 999; i++) {
+				
+				filename = `export_${date}`;
+				filename += `-(${i}).pdf`
+				
+				if(fs.existsSync(`${file_path}${filename}`)) {
+					continue;
+				} else {
+					break;
+				}
+			
+			}
+		} 
+			
+	} catch (e) {
+		console.error(e, 'File already exists');
+	}
+
 
 
 	// Get products from database
@@ -186,7 +244,6 @@ router.get("/new_pdf", (req, res) => {
 		if (err) {
 			return res.json({error: true});
 		}	
-
 
 		// Create the PDF
 		const doc = new PDFDocument();
@@ -201,12 +258,6 @@ router.get("/new_pdf", (req, res) => {
 			doc.moveDown();
 		})
 		
-		/*
-		for(let i = 0; i <= 100; i++) {
-			doc.fontSize(12).text(`4 x product #${i} $00 - Admin`);
-		}
-		doc.fontSize(12).text("2 x Noijoda $000");
-		*/
 
 		doc.end();
 
@@ -237,21 +288,57 @@ router.post('/add_user', (req, res) => {
 
 	let salt = bcrypt.genSaltSync(10);
 	let hash = bcrypt.hashSync(password, salt);
+	
+	// Check if any input is empty
+	for(key in req.body) {
 
-	let sql = "INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
-	let params = [name, lastname, username, email, hash, date, role];
+		if(req.body[key] == "") {
+			
+			req.flash("error", `Ningun campo puede estar vacio`);
+			return res.redirect(`/member/add_user`);
+		}
 
-	db.run(sql, params, (err) => {
-		if(err) {
+	}
+	
+
+	// Check for already existing username and email
+	let sql_check_existing = "SELECT id FROM users WHERE username = ? OR email = ?";
+	let params_check_existing = [username, email];
+	db.get(sql_check_existing, params_check_existing, (err, row) => {
+
+		// Check Error
+		if (err) {
+			req.flash("error", `Ocurrio un error al momento de agregar el nuevo usuario`);
+			return res.redirect(`/member/add_user`);
 			console.error(err);
-			req.flash("error", 'Ocurrio un error agregando un nuevo usuario');
+		}
+
+		if(row) {
+
+			req.flash("error", `Usuario o email ya esta siendo usado por otro usuario`);
+			return res.redirect(`/member/add_user`);
+		}
+
+
+		// Inser user to database
+		let sql = "INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		let params = [name, lastname, username, email, hash, date, role];
+
+		db.run(sql, params, (err) => {
+			if(err) {
+				console.error(err);
+				req.flash("error", 'Ocurrio un error agregando un nuevo usuario');
+				return res.redirect("add_user");
+			}		
+
+
+			req.flash("success", 'Usuario guardado con excito');
 			return res.redirect("add_user");
-		}		
+		});
 
+	})
+	
 
-		req.flash("success", 'Usuario guardado con excito');
-		return res.redirect("add_user");
-	});
 
 })
 
@@ -267,6 +354,19 @@ router.post('/add', (req, res) => {
 	let {name, price, amount, description } = req.body;
 	price = parseInt(price);
 	amount = parseInt(amount);
+
+
+
+	// Check if any input is empty
+	for(key in req.body) {
+
+		if(req.body[key] == "") {
+			
+			req.flash("error", `Ningun campo puede estar vacio`);
+			return res.redirect("/member/add");
+		}
+
+	}
 
 	// check price
 	if(isNaN(price)) {
@@ -293,12 +393,12 @@ router.post('/add', (req, res) => {
 		if (err) {
 			console.log(err);
 			req.flash("error", 'Ocurrio un error, no se pudo guardar su producto');
-			return res.redirect("/member/add");
+			return res.redirect("/member/dashboard");
 		}	
 
 
 		req.flash("success", 'Su producto fue guardado con excito');
-		return res.redirect("/member/add");
+		return res.redirect("/member/dashboard");
 
 	});
 })

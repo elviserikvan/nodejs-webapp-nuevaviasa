@@ -1,5 +1,4 @@
 todos.txt
 node_modules/
-db/database.db
 public/pdf/*.pdf
 
