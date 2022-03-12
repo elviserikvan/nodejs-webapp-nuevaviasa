@@ -22,6 +22,17 @@ router.get("/ayuda", (req, res) => {
 	res.render("pages/ayuda", {user: req.user});
 })
 
+router.get("/manage_users", (req, res) => {
+
+	let sql = 'SELECT * FROM users';
+
+	db.all(sql, [], (err, users) => {
+		if(err) console.error(err);
+
+		res.render("pages/manage_users", {user: req.user, users});
+	})
+})
+
 router.get("/database", (req, res) => {
 
 
@@ -421,6 +432,40 @@ router.get("/new_pdf", (req, res) => {
 
 router.get('/add_user', (req, res) => {
 	res.render('pages/ass_user', {user: req.user});
+})
+
+
+router.get('/edit_user/:id', (req, res) => {
+	let sql = 'SELECT * FROM users WHERE id = ?';
+
+	db.get(sql, [req.params.id], (err, row) => {
+		if (err || row == undefined) {
+			req.flash("error", 'Ocurrio un error al momento de editar este usuario');
+			return res.redirect('/member/manage_users');
+		}	
+
+		res.render('pages/edit_user', {user: req.user, data: row});
+
+	})
+})
+
+router.post('/edit_user', (req, res) => {
+
+	let {id, name, lastname, username, email, role} = req.body;
+
+	let sql = 'UPDATE users SET first_name = ?, last_name = ?, username = ?, email = ?, role = ? WHERE id = ?';
+	let params = [name, lastname, username, email, role, id];
+
+	db.run(sql, params, err => {
+		if (err) {
+			req.flash("error", 'Ocurrio un error al momento de editar este usuario');
+			return res.redirect('/member/manage_users');
+		}
+
+		req.flash("success", 'Usuario modificado con excito');
+		return res.redirect('/member/manage_users');
+
+	})
 })
 
 router.post('/add_user', (req, res) => {
