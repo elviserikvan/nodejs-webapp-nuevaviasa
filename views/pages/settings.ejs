@@ -3,6 +3,11 @@
 <head>
 	<title>Configuraciones</title>
 	<%- include('../partials/head') %>
+	<style>
+		html, body, .container {
+			height: 100%;
+		}
+	</style>
 </head>
 <body>
 
@@ -14,10 +19,17 @@
 
 		<main class="content">
 
+			<%- include('../partials/alerts') %>
 
-			<% if(user.username == 'admin')  {%>
+
+			<% if(user.role == 'admin')  {%>
 				<h3>Crear nuevos usuarios</h3>
-				<a class="btn btn-warning" href="/member/add_user">Añadir un nuevo usuario</a>
+				<a class="btn btn-warning my-4" href="/member/add_user">Añadir un nuevo usuario</a>
+				<a class="btn btn-warning my-4" href="/member/manage_users">Gestionar usuarios</a>
+				<hr>
+
+				<h3>Copias de seguridad de la base de datos</h3>
+				<a class="btn btn-warning my-4" href="/member/database">Ir</a>
 				<hr>
 			<% } %>
 
@@ -30,46 +42,7 @@
 					<input class="ml-4 btn btn-danger" type="submit" value="Guardar">
 				</div>
 			</form>
-
 			<hr>
-			
-			<!--
-			<div class="database_backup">
-				<h3 class="text-center">Copias de seguridad de la base de datos</h3>
-
-				<div class="buttons d-flex align-items-center justify-content-end">
-					<button id="new_backup_btn" class="btn btn-warning my-4">Generar</button>
-				</div>
-
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">BackUp</th>
-							<th scope="col">Fecha</th>
-							<th scope="col">Usuario</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><a href="#">2022-03-09.db</a></td>
-							<td>2022-03-09</td>
-							<td>Admin</td>
-						</tr>
-						<tr>
-							<td><a href="#">2022-03-09.db</a></td>
-							<td>2022-03-09</td>
-							<td>Admin</td>
-						</tr>
-						<tr>
-							<td><a href="#">2022-03-09.db</a></td>
-							<td>2022-03-09</td>
-							<td>Admin</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			-->
-
 		</main>
 
 		<footer>

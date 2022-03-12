@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<title>Restaurar base de datos</title>
+	<%- include('../partials/head') %>
+	<!-- <link rel="stylesheet" href="/css/dashboard.css" media="all"> -->
+	<style>
+		html, body, .container {
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content text-center text-left">
+
+			<%- include('../partials/alerts') %>
+
+				<!--
+			<div class="top_table d-flex justify-content-between align-items-center mt-5 mb-3">
+
+				<div class="btn-group">
+					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						opciones
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/member/add">añadir nuevo</a>
+						<a class="dropdown-item" href="/member/exportpdf">exportar a pdf</a>
+					</div>
+				</div>
+
+				<button id="new_db_backup" class="btn btn-warning">generar nuevo</button>
+				<a class="btn btn-warning" href="restore_db_backup">restaurar</a>
+			</div>
+				-->
+				<!-- <button id="new_db_backup" class="btn btn-warning">restaurar</button> -->
+
+				<h3>Restaurar base de datos</h3>
+				<p>Selecione una copia de seguridad generada con anterioridad para poder restaurar la base de datos</p>
+				<hr class="my-5">
+				<form class="d-flex flex-column align-items-center" action="" method="POST">
+					<select name="report_id" class="form-select" aria-label="Default select example">
+
+						<option selected>Selecionar una copia de seguridad</option>
+
+
+						<% reports.forEach(report => {  %>
+							<option value=" <%= report.id %>"> <%= report.name %> </option>
+						<% }) %>
+
+						<!--
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+						-->
+					</select>
+
+					<input class="mt-5 btn btn-warning" type="submit" value="Restaurar">
+				</form>
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+</body>
+</html>
