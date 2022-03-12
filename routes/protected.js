@@ -430,6 +430,54 @@ router.get("/new_pdf", (req, res) => {
 })
 
 
+router.get('/change_user_password/:id', (req, res) => {
+
+	let sql = 'SELECT * FROM users WHERE id = ?';
+
+	db.get(sql, [req.params.id], (err, row) => {
+		if (err || row == undefined) {
+			req.flash("error", 'Ocurrio un error al momento de cambiarle la contraseña al usuario');
+			return res.redirect('/member/manage_users');
+		}	
+
+		res.render('pages/change_user_password', {user: req.user, data: row});
+
+	})
+
+})
+
+
+router.post('/change_user_password', (req, res) => {
+
+	if(req.body.password != req.body.password2) {
+		req.flash("error", 'Las contraseñas no coinciden');
+		return res.redirect(`/member/change_user_password/${req.body.id}`);
+	}
+
+	if (req.body.password == '' || req.body.password2 == '') {
+		req.flash("error", 'Los campos no puede estar vacios');
+		return res.redirect(`/member/change_user_password/${req.body.id}`);
+	}
+
+	let salt = bcrypt.genSaltSync(10);
+	let hash = bcrypt.hashSync(req.body.password, salt);
+
+	let sql = 'UPDATE users SET password = ? WHERE id = ?';
+	let params = [hash, req.body.id];
+
+	db.run(sql, params, err => {
+		if (err) {
+			req.flash("error", 'ocurrio un error al momento de cambiar la contraseña');
+			return res.redirect(`/member/change_user_password/${req.body.id}`);
+		}
+
+		req.flash("success", 'Contraseña cambiada con excito');
+		return res.redirect(`/member/manage_users`);
+
+	})
+})
+
+
 router.get('/add_user', (req, res) => {
 	res.render('pages/ass_user', {user: req.user});
 })

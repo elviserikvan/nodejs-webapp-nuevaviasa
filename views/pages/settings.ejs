@@ -22,7 +22,7 @@
 			<%- include('../partials/alerts') %>
 
 
-			<% if(user.username == 'admin')  {%>
+			<% if(user.role == 'admin')  {%>
 				<h3>Crear nuevos usuarios</h3>
 				<a class="btn btn-warning my-4" href="/member/add_user">Añadir un nuevo usuario</a>
 				<a class="btn btn-warning my-4" href="/member/manage_users">Gestionar usuarios</a>
