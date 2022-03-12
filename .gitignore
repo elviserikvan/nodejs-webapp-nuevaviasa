@@ -1,9 +1,5 @@
 todos.txt
 node_modules/
 public/pdf/*.pdf
-<<<<<<< HEAD
-todos.txt
-=======
 public/db_backup/*.json
-
->>>>>>> development
+db/database.db
