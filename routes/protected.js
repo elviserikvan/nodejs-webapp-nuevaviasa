@@ -485,10 +485,240 @@ router.post('/add_user', (req, res) => {
 })
 
 
+router.get('/restore_db_backup', (req, res) => {
+	let sql = 'SELECT * FROM reports WHERE type = ?';
+	let params = ['db'];
+
+	db.all(sql, params, (err, rows) => {
+		if (err) console.error(err);
+
+		res.render('pages/restore_db', {user: req.user, reports: rows});
+	})
+
+})
+
+router.post('/restore_db_backup', (req, res) => {
+
+	let report_id = parseInt(req.body.report_id);
+
+	let sql = 'SELECT * FROM reports WHERE id = ?';
+	let params = [report_id];
+
+	db.get(sql, params, (err, row) => {
+		if(err) console.error(err);
+		
+		try {
+			let data = fs.readFileSync(`public/db_backup/${row.name}`, 'utf8');
+			let data_json = JSON.parse(data);
+
+			/*
+			console.log(JSON.parse(data));
+			console.log(data_json);
+			*/
+
+			// Loop through users, products, pdf
+			/*
+			for (key in data_json) {
+
+					if(key != 'users' ) {continue};
+
+				// Loop through all the elements of that section
+				data_json[key].forEach(function(row) {
+
+
+					var sql;
+					var params;
+
+					if (key == 'users' ) {
+						console.log('Nojoda');
+						sql = "SELECT id FROM users WHERE first_name = ? AND last_name = ? AND username = ? AND email = ? AND password = ? AND registered_at = ? AND role = ?";
+						params = [row.first_name, row.last_name, row.username, row.email, row.password, row.registered_at, row.role];
+					}
+
+					sql = "SELECT id FROM users WHERE first_name = ? AND last_name = ? AND username = ? AND email = ? AND password = ? AND registered_at = ? AND role = ?";
+					params = [row.first_name, row.last_name, row.username, row.email, row.password, row.registered_at, row.role];
+
+					/*
+					if (key == 'products' ) {
+						var sql = 'select id from products where name = ? and price = ? and amount = ? and description = ? and user_id = ? ';
+						var params = [row.name, row.price, row.amount, row.description, row.user_id];
+					}
+
+					if (key == 'pdf' ) {
+						var sql = 'SELECT id FROM pdf WHERE name = ? AND created_at = ? AND user_id = ?';
+						var params = [row.name, row.created_at, row.user_id];
+					}
+
+					db.get(sql, params, (err, row) => {
+						if (err) console.error(err);
+
+						if (row == undefined) {
+
+							/*
+							let sql_insert = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)'
+							let params_insert = [row.first_name, row.last_name, row.username, row.email, row.password, row.registered_at, row.role];
+
+						       var sql_insert; 
+						       var params_insert;
+
+							if (key == 'users' ) {
+								sql_insert = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)';
+								params_insert = [row.first_name, row.last_name, row.username, row.email, row.password, row.registered_at, row.role];
+							}
+
+							/*
+							if (key == 'products' ) {
+								var sql_insert = 'INSERT INTO products (name, price, amount, description, user_id) VALUES (?, ?, ?, ?, ?)';
+								var params_insert = [row.name, row.price, row.amount, row.description, row.user_id];
+							}
+
+							if (key == 'pdf' ) {
+								var sql_insert = 'INSERT INTO pdf (name, created_at, user_id) VALUES (?, ?, ?)';
+								var params_insert = [row.name, row.created_at, row.user_id];
+							}
+
+							db.run(sql_insert, params_insert, err => {
+								if (err) console.error(err);
+
+								req.flash('success', 'Base de datos restaurada con excito');
+								return res.redirect('/member/restore_db_backup');
+							})
+
+						}
+					})
+					
+				})	
+
+			}
+		*/
+
+			// users
+			data_json['users'].forEach(user => {
+				//console.log(user);
+
+				let sql = 'SELECT id FROM users WHERE first_name = ? AND last_name = ? AND username = ? AND email = ? AND password = ? AND registered_at = ? AND role = ? ';
+				let params = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+
+				db.get(sql, params, (err, row) => {
+					if (err) console.error(err);
+
+					if (row == undefined) {
+
+						let sql_insert = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)'
+						let params_insert = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+
+						db.run(sql_insert, params_insert, err => {
+							if (err) console.error(err);
+
+
+						})
+
+					}
+
+				})
+			})
+
+			data_json['products'].forEach(product => {
+				//console.log(user);
+
+				/*
+				let sql = 'SELECT id FROM users WHERE first_name = ? AND last_name = ? AND username = ? AND email = ? AND password = ? AND registered_at = ? AND role = ? ';
+				let params = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+				*/
+
+				let sql = 'SELECT id FROM products WHERE name = ? and price = ? and amount = ? and description = ? and user_id = ? ';
+				let params = [product.name, product.price, product.amount, product.description, product.user_id];
+
+				db.get(sql, params, (err, row) => {
+					if (err) console.error(err);
+
+					if (row == undefined) {
+
+						/*
+						let sql_insert = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)'
+						let params_insert = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+						*/
+
+						var sql_insert = 'INSERT INTO products (name, price, amount, description, user_id) VALUES (?, ?, ?, ?, ?)';
+						var params_insert = [product.name, product.price, product.amount, product.description, product.user_id];
+
+						db.run(sql_insert, params_insert, err => {
+							if (err) console.error(err);
+
+						})
+
+					}
+
+				})
+			})
+
+			data_json['pdf_data'].forEach(pdf => {
+				//console.log(user);
+
+				/*
+				let sql = 'SELECT id FROM users WHERE first_name = ? AND last_name = ? AND username = ? AND email = ? AND password = ? AND registered_at = ? AND role = ? ';
+				let params = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+
+				let sql = 'SELECT id FROM products WHERE name = ? and price = ? and amount = ? and description = ? and user_id = ? ';
+				let params = [product.name, product.price, product.amount, product.description, product.user_id];
+				*/
+
+				var sql = 'SELECT id FROM pdf WHERE name = ? AND created_at = ? AND user_id = ?';
+				var params = [pdf.name, pdf.created_at, pdf.user_id];
+
+				db.get(sql, params, (err, row) => {
+					if (err) console.error(err);
+
+					if (row == undefined) {
+
+						/*
+						let sql_insert = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at, role) VALUES (?, ?, ?, ?, ?, ?, ?)'
+						let params_insert = [user.first_name, user.last_name, user.username, user.email, user.password, user.registered_at, user.role];
+
+						var sql_insert = 'INSERT INTO products (name, price, amount, description, user_id) VALUES (?, ?, ?, ?, ?)';
+						var params_insert = [product.name, product.price, product.amount, product.description, product.user_id];
+						*/
+
+
+						var sql_insert = 'INSERT INTO pdf (name, created_at, user_id) VALUES (?, ?, ?)';
+
+						db.run(sql_insert, params, err => {
+							if (err) console.error(err);
+
+						})
+
+					}
+
+				})
+			})
+
+			req.flash('success', 'Base de datos restaurada con excito');
+			return res.redirect('/member/restore_db_backup');
+
+			/*
+			for(key in data_json) {
+				data_json[key].forEach(row => console.log(row));
+			}
+			*/
+
+
+		} catch(e) {
+			console.log(e);
+
+			req.flash('error', 'Ocurrio un error restaurando la base de datos')
+			return res.redirect('/member/restore_db_backup');
+		}
+		
+	})
+})
+
+
+/*
 router.get('/new_db_backup', (req, res) => {
 	db.run("'.dump'");
 	res.json({data: 'nojoda'});
 })
+*/
 
 
 router.post('/add', (req, res) => {

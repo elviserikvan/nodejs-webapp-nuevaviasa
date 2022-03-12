@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
-	<title>gestion de la base de datos</title>
+	<title>Restaurar base de datos</title>
 	<%- include('../partials/head') %>
 	<!-- <link rel="stylesheet" href="/css/dashboard.css" media="all"> -->
 	<style>
@@ -22,9 +22,9 @@
 
 			<%- include('../partials/alerts') %>
 
+				<!--
 			<div class="top_table d-flex justify-content-between align-items-center mt-5 mb-3">
 
-				<!--
 				<div class="btn-group">
 					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						opciones
@@ -34,53 +34,40 @@
 						<a class="dropdown-item" href="/member/exportpdf">exportar a pdf</a>
 					</div>
 				</div>
-				-->
 
 				<button id="new_db_backup" class="btn btn-warning">generar nuevo</button>
 				<a class="btn btn-warning" href="restore_db_backup">restaurar</a>
-				<!-- <button id="new_db_backup" class="btn btn-warning">restaurar</button> -->
 			</div>
+				-->
+				<!-- <button id="new_db_backup" class="btn btn-warning">restaurar</button> -->
 
-			<table class="table text-left">
-				<thead>
-					<tr>
-						<!-- <th scope="col">#</th> -->
-						<th scope="col">nombre</th>
-						<th scope="col">fecha</th>
-						<th scope="col">creador</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody id="backups_table">
-					<% backups.forEach(row => {  %>
+				<h3>Restaurar base de datos</h3>
+				<p>Selecione una copia de seguridad generada con anterioridad para poder restaurar la base de datos</p>
+				<hr class="my-5">
+				<form class="d-flex flex-column align-items-center" action="" method="POST">
+					<select name="report_id" class="form-select" aria-label="Default select example">
 
-						<tr>
-							<td><%= row.name %></td>
-							<td><%= row.created_at %></td>
-							<td><%= row.username %></td>
-							<td>
-								<div class="dropdown">
-									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownmenubutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										...
-									</button>
-									<div class="dropdown-menu" aria-labelledby="dropdownmenubutton">
-										<a class="dropdown-item" href="/member/delete_db_backup/<%= row.id %>">eliminar</a>
-									</div>
-								</div>
-							</td>
-						</tr>
+						<option selected>Selecionar una copia de seguridad</option>
 
-					<% }) %>
-				</tbody>
-			</table>
 
+						<% reports.forEach(report => {  %>
+							<option value=" <%= report.id %>"> <%= report.name %> </option>
+						<% }) %>
+
+						<!--
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+						-->
+					</select>
+
+					<input class="mt-5 btn btn-warning" type="submit" value="Restaurar">
+				</form>
 		</main>
 
 		<footer>
 			    <%- include('../partials/footer'); %>
 		</footer>
 	</div>
-
-	<script src="/js/database.js"></script>
 </body>
 </html>
