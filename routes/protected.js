@@ -22,6 +22,17 @@ router.get("/ayuda", (req, res) => {
 	res.render("pages/ayuda", {user: req.user});
 })
 
+router.get("/database", (req, res) => {
+
+
+	let sql = 'SELECT reports.id, name, created_at, username FROM reports INNER JOIN users ON reports.user_id = users.id WHERE type = ?';
+	let params = ['db'];
+	db.all(sql, params, (err, rows) => {
+		res.render("pages/database", {user: req.user, backups: rows});
+	})
+
+
+})
 
 router.get("/logout", (req, res) => {
 	req.logout();
@@ -203,6 +214,137 @@ router.get("/exportpdf", (req, res) => {
 	//	console.log(row);
 		res.render("pages/export_pdf", {user: req.user, reports: row});
 	})
+
+})
+
+router.get('/delete_db_backup/:id', (req, res) => {
+	let sql = "DELETE FROM reports WHERE id = ?";
+	let params = [req.params.id];
+
+	db.all(sql, params, (err, row) => {
+		if (err) { 
+			console.log(err);  
+
+			req.flash("error", `Ocurrio un error al momento de eliminar este reporte`);
+			return res.redirect("/member/database");
+
+		}
+
+		req.flash("success", `Reporte eliminado`);
+		return res.redirect("/member/database");
+	})
+	
+})
+
+router.post('/new_db_backup', (req, res) => {
+
+
+//	res.json({nojoda: 'Verga'});
+
+	var file_path = path.join(__dirname, '../public/db_backup/'); 
+	var date = new Date().toISOString().split('T')[0]; 
+	var filename = `database_${date}.json`;
+
+	// Check of filename already exists
+	try {
+		if(fs.existsSync(`${file_path}${filename}`)) {
+			// File already exists
+
+			date = new Date().toISOString().split('T')[0]; 
+			for(i = 0; i <= 999; i++) {
+				
+				filename = `database_${date}`;
+				filename += `-(${i}).json`
+				
+				if(fs.existsSync(`${file_path}${filename}`)) {
+					continue;
+				} else {
+					break;
+				}
+			
+			}
+		} 
+			
+	} catch (e) {
+		console.error(e, 'File already exists');
+	}
+
+
+//	console.log(`${filename}`);
+
+
+	//BackUp users table
+	let sql_users = 'SELECT * FROM users';
+	db.all(sql_users, [], (err, users_data) => {
+
+		/*
+		console.log(users_data);
+		console.log(JSON.stringify(users_data));
+		*/
+
+
+		//BackUp products table
+		let sql_products = 'SELECT * FROM products';
+		db.all(sql_products, [], (err, products_data) => {
+
+
+			/*
+			console.log(products_data);
+			console.log(JSON.stringify(products_data));
+			*/
+
+
+			//BackUp pdf table
+			let sql_pdf = 'SELECT * FROM pdf';
+			db.all(sql_pdf, [], (err, pdf_data) => {
+
+				/*
+				console.log(pdf_data);
+				console.log(JSON.stringify(pdf_data));
+				*/
+
+				const backup_data = {
+					'users': users_data,
+					'products': products_data,
+					'pdf_data': pdf_data
+				}
+
+				/*
+				console.log(backup_data);
+				console.log('-------------------------------------------------------------------------------------------------------------------------------');
+				console.log(JSON.stringify(backup_data));
+				console.log('-------------------------------------------------------------------------------------------------------------------------------');
+				console.log(`${file_path}${filename}`);
+				*/
+
+				fs.writeFile(`${file_path}${filename}`, JSON.stringify(backup_data), err => console.error(err));
+				
+				let sql_insert = 'INSERT INTO reports (name, created_at, user_id, type) VALUES (?, ?, ?, ?)';
+				let params = [filename, date, req.user.id, 'db'];
+				db.run(sql_insert, params, function (err) {
+					if (err) {
+						console.error(err);
+					}
+
+					
+					res.json({filename, date, user: req.user.username, id: this.lastID });
+
+					/*
+					console.log(this.lastID);
+					console.log(this.changes);
+					*/
+
+				})
+
+
+			})
+
+
+		})
+	})
+	
+
+
 
 })
 

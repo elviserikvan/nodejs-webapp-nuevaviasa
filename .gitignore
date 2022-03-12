@@ -1,4 +1,5 @@
 todos.txt
 node_modules/
 public/pdf/*.pdf
+public/db_backup/*.json
 
