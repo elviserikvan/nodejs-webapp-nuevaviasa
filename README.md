@@ -21,4 +21,4 @@ This Web App is design to help **Nueva Viasa** (A local bakery in my city) with 
 
 ## Screenshots
 
-![LandPage](blob/main/screenshots/landpage.png?raw=true)
+![LandPage](screenshots/landpage.png?raw=true)
