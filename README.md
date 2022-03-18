@@ -21,4 +21,20 @@ This Web App is design to help **Nueva Viasa** (A local bakery in my city) with 
 
 ## Screenshots
 
-![LandPage](screenshots/landpage.png?raw=true)
+<!--Land Page Screenshot -->
+![Land Page](screenshots/landpage.png?raw=true "Land Page")
+
+<!--Dashboard Screenshot -->
+![Dashboard](screenshots/dashboard.png?raw=true "Dashboard")
+
+<!--Export to PDF Screenshot -->
+![Export to PDF](screenshots/export_to_pdf.png?raw=true "Export to PDF")
+
+<!--Database management Screenshot -->
+![Database management](screenshots/database_management.png?raw=true "Database management")
+
+<!--Restore DB BackUp Screenshot -->
+![Restore DB BackUp](screenshots/restore_db_backup.png?raw=true "Restore DB BackUp")
+
+<!--User management Screenshot -->
+![User management](screenshots/user_management.png?raw=true "User management")
