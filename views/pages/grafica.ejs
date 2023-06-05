@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Grafica</title>
+	<%- include('../partials/head') %>
+
+	<style>
+		html, body, .container {
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<main class="content">
+			<%- include('../partials/alerts') %>
+
+			<div id="charDiv" style="width: 50%; height: 300px; margin: 0px auto;"></div>
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+
+
+	<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
+	<script>
+
+		async function getChartData() {
+			const response = await fetch('/member/grafica_data');
+			const data = await response.json();
+
+			JSC.Chart('charDiv', {
+				type: 'column',
+				series: [
+					{
+						name: 'Productos',
+						points: data
+					}
+				]
+			});
+		}
+
+		getChartData();
+
+	</script>
+</body>
+</html>

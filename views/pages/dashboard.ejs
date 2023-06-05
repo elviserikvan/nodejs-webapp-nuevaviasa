@@ -30,6 +30,7 @@
 						Opciones
 					</button>
 					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/member/grafica">Grafica</a>
 						<a class="dropdown-item" href="/member/add">Añadir Nuevo</a>
 						<a class="dropdown-item" href="/member/exportpdf">Exportar a PDF</a>
 					</div>
@@ -41,6 +42,8 @@
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Nombre</th>
+						<th scope="col">Codigo de Barras</th>
+						<th scope="col">Cantidad</th>
 						<th scope="col">Precio Bolivares</th>
 						<th scope="col">Precio Dolares</th>
 						<th scope="col"></th>
@@ -52,6 +55,8 @@
 						<tr>
 							<th scope="row"><%= row.id %></th>
 							<td><%= row.name %></td>
+							<td><%= row.numero_barra %></td>
+							<td><%= row.amount %></td>
 							<td><%= row.precio %></td>
 							<td><%= row.price %></td>
 							<td>

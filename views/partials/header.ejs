@@ -6,10 +6,13 @@
 		<% if(user) {%>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<%= user.username %>
+					<span class="username-name-dropdown-menu">
+						<%= user.username %>
+					</span>
 					<img src="/images/user.png" alt="">
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="/member/database">Base de datos</a>
 					<a class="dropdown-item" href="/member/settings">Configuraciones</a>
 					<a class="dropdown-item" href="/member/ayuda">Ayuda</a>
 					<div class="dropdown-divider"></div>

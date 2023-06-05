@@ -1,0 +1,17 @@
+body {
+	background-image: url("/images/general-background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+
+	color: #fff;
+}
+
+#menu_nav .navbar-brand,
+#menu_nav .username-name-dropdown-menu {
+	color: white;
+}
+
+.nav-item .nav-link {
+	color: white !important;
+}
