@@ -116,6 +116,40 @@ router.get("/dashboard", (req, res) => {
 
 })
 
+router.get('/grafica_data', (req, res) => {
+
+	//res.json({hello: 'World'});
+
+	let sql = 'SELECT * FROM products';
+	let params = [];
+
+	db.all(sql, params, (err, rows) => {
+
+		//console.log(rows);
+		const chart_data = [];
+
+		rows.forEach((row) => {
+			
+		//	row.precio = (row.price * dolar_price.value).toFixed(2);
+			
+			chart_data.push({
+				x: row.name,
+				y: row.amount
+			});
+
+		});
+	
+		res.json(chart_data);
+	})
+
+});
+
+router.get('/grafica', (req, res) => {
+
+		res.render("pages/grafica", {user: req.user});
+
+});
+
 
 router.get("/delete/:id", (req, res) => {
 	let sql = "DELETE FROM products WHERE id = ?";
@@ -222,7 +256,8 @@ router.get("/exportpdf", (req, res) => {
 	db.all(sql, [], (err, row) => {
 		if(err) console.error(err);
 
-	//	console.log(row);
+		//console.log(row);
+
 		res.render("pages/export_pdf", {user: req.user, reports: row});
 	})
 
@@ -816,11 +851,9 @@ router.get('/new_db_backup', (req, res) => {
 
 router.post('/add', (req, res) => {
 
-	let {name, price, amount, description } = req.body;
+	let {name, price, amount, description, fecha, numero_de_barras} = req.body;
 	price = parseInt(price);
 	amount = parseInt(amount);
-
-
 
 	// Check if any input is empty
 	for(key in req.body) {
@@ -851,8 +884,8 @@ router.post('/add', (req, res) => {
 
 
 	// Guardar en la base de datos
-	let sql = 'INSERT INTO products (name, price, amount, description, user_id) VALUES (?, ?, ?, ?, ?)';
-	let params = [name, price, amount, description, req.user.id];
+	let sql = 'INSERT INTO products (name, price, amount, description, user_id, fecha, numero_barra) VALUES (?, ?, ?, ?, ?, ?, ?)';
+	let params = [name, price, amount, description, req.user.id, fecha, numero_de_barras];
 
 	db.all(sql, params, (err, row) => {
 		if (err) {
