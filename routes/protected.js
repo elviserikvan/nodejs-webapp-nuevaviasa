@@ -427,7 +427,7 @@ router.get("/new_pdf", (req, res) => {
 
 
 	// Get products from database
-	let sql_products = "SELECT name, amount, price, username FROM products INNER JOIN users ON products.user_id = users.id";
+	let sql_products = "SELECT name, amount, price, username FROM products JOIN users ON products.user_id = users.id";
 	db.all(sql_products, [], (err, rows) => {
 		if (err) {
 			return res.json({error: true});

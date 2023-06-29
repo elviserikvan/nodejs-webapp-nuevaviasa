@@ -34,6 +34,7 @@ router.post("/login", passport.authenticate('local', {
 	failureFlash: 'Email o contraseña incorrectas'
 }))
 
+
 /*
 router.get("/create_admin", (req, res) => {
 	res.send('Creating user');
@@ -43,12 +44,12 @@ router.get("/create_admin", (req, res) => {
 	let salt = bcrypt.genSaltSync(10);
 	let hash = bcrypt.hashSync('admin', salt);
 
-	let sql = 'INSERT INTO users (first_name, last_name, username, email, password, registered_at) VALUES (?, ?, ?, ?, ?, ?)'
+	let sql = 'INSERT INTO users (first_name, last_name, username, email, password, role, registered_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
 
-	let params = ['Admin', 'Admin', 'admin', 'admin@admin.com', hash, date]
+	let params = ['Admin', 'Admin', 'admin', 'admin@admin.com', hash, 'admin', date]
 
 	console.log(db)
-	/*
+
 	db.all(sql, params, (err, rows) => {
 		if (err) throw err
 	})
