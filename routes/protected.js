@@ -3,7 +3,8 @@ const path = require('path');
 const bcrypt = require("bcrypt");
 const db = require('../models/Database.js');
 const router = require("express").Router();
-const PDFDocument = require('pdfkit');
+//const PDFDocument = require('pdfkit');
+const PDFDocument = require('pdfkit-table');
 
 
 // Middleware to only allow authenticated users
@@ -427,25 +428,38 @@ router.get("/new_pdf", (req, res) => {
 
 
 	// Get products from database
-	let sql_products = "SELECT name, amount, price, username FROM products JOIN users ON products.user_id = users.id";
-	db.all(sql_products, [], (err, rows) => {
+	let sql_products = "SELECT name, amount, price, username, products.numero_barra FROM products JOIN users ON products.user_id = users.id";
+	db.all(sql_products, [], async (err, rows) => {
 		if (err) {
 			return res.json({error: true});
 		}	
 
 		// Create the PDF
-		const doc = new PDFDocument();
+		const doc = new PDFDocument({margin: 30, size: 'A4'});
 		doc.pipe(fs.createWriteStream(`${file_path}${filename}`));
 
-
-		doc.fontSize(25).text("Productos en la base de datos");
-		doc.moveDown();
-
+		let filas = [];
 		rows.forEach(row => {
-			doc.fontSize(12).text(`${row.amount} x ${row.name} $${row.price} - ${row.username}`);
-			doc.moveDown();
+
+			let fila = [
+				row.name,
+				row.numero_barra,
+				row.amount,
+				row.price,
+				row.username
+			];
+
+			filas.push(fila);
 		})
+
+		const table = {
+			title: "Productos",
+			subtitle: "Lista de los productos presentes actualmente",
+			headers: [ "Nombre del producto",  "Codigo de Barras", "Cantidad", "Precio en dolares", "Usuario" ],
+			rows: filas
+		};
 		
+		await doc.table(table, { width: 540 });
 
 		doc.end();
 
