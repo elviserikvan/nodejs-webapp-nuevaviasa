@@ -47,7 +47,7 @@ router.post('/restaurar', (req, res) => {
 	db.all(sql, [], (err, rows) => {
 		if(err) console.error(err);
 
-		console.log(rows);
+		//console.log(rows);
 		res.render("pages/cambiar_clave", {user: req.user,  email: rows})
 	})
 
