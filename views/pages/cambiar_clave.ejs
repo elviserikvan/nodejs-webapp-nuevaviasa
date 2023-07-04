@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Cambiar contraseña</title>
+	<%- include('../partials/head') %>
+	<link rel="stylesheet" href="/css/login.css" media="all">
+	<style>
+		.hide {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<% if(messages.error) {%>
+		<%= messages.error %>
+	<% } %>
+
+	<div class="container d-flex flex-column justify-content-between">
+	
+		<header>
+			    <%- include('../partials/header'); %>
+		</header>
+
+		<div id="no_match_alert" class="alert alert-danger hide" role="alert">
+			Las contraseñas no coinciden
+		</div>
+
+		<main class="content text-center text-left d-flex align-items-center justify-content-center">
+
+			<% if(email.length > 0){ %>
+
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title text-dark">Hola <%= email[0].first_name  %> </h5>
+						<p class="text-dark card-text">Por favor, introduce la nueva contraseña</p>
+
+						<form id="change_password_form" action="/cambiar_clave" method="POST">
+
+							<div class="form-group">
+								<label class="text-dark" for="password">Contraseña</label>
+								<input class="form-control" id="password" type="password" name="password">
+							</div>
+
+							<div class="form-group">
+								<label class="text-dark" for="passowrd-2">Repita su contraseña</label>
+								<input class="form-control" id="password-2" type="password" name="password2">
+							</div>
+
+							<input type="hidden" name="user_id" value="<%= email[0].id %>" >
+
+							<input id="submit_btn" type="submit" value="Guardar" class="btn btn-primary">
+
+						</form>
+
+					</div>
+				</div>
+
+			<% } else { %>  
+
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title text-dark">Cuenta no encontrada</h5>
+						<p class="text-dark card-text">La cuenta que intentas cambiar la contraseña no fue encontrada</p>
+						<a href="/restaurar" class="btn btn-primary">Intentar Nuevamente</a>
+					</div>
+				</div>
+
+			<% } %>
+
+		</main>
+
+		<footer>
+			    <%- include('../partials/footer'); %>
+		</footer>
+	</div>
+	<script src="/js/cambiar_clave.js"></script>
+</body>
+</html>

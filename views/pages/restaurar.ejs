@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Iniciar Sesion</title>
+	<title>Recuperar Contraseña</title>
 	<%- include('../partials/head') %>
 	<link rel="stylesheet" href="/css/login.css" media="all">
 </head>
@@ -17,26 +17,21 @@
 		</header>
 
 		<main class="content text-center text-left">
-				<form class="col-8 m-auto" method="POST" action="/login">
+				<form class="col-8 m-auto" method="POST" action="/restaurar">
 					<div class="form-wrap">
 						<div class="form-group">
 							<label class="text-dark" for="exampleInputEmail1">Email</label>
-							<input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder=" email">
+							<input type="email" name="email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder=" email">
 							<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-						</div>
-						<div class="form-group my-5">
-							<label class="text-dark" for="exampleInputPassword1">Contraseña</label>
-							<input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 						</div>
 
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Iniciar sesion</button>
+							<button type="submit" id="buscar_restaurar_btn" class="btn btn-primary">Buscar cuenta</button>
 						</div>
 
-						<a class="recuperar-contraseña-btn" href="/restaurar">Recuperar contraseña</a>
+						<a class="recuperar-contraseña-btn" href="/login">¿Ya  tienes cuenta? Inicia sesion</a> 
 					</div>
 				</form>
-
 		</main>
 
 		<footer>
@@ -44,5 +39,7 @@
 		</footer>
 	</div>
 
+	<script src="/js/restaurar.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>
