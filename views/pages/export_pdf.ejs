@@ -15,30 +15,37 @@
 
 		<main class="content text-center text-left">
 
-			<h2 class="mb-5">Exportar a PDF</h2>
 
-			<div style="width: 100%;" class="d-flex align-items-center justify-content-end my-4">
-				<button type="button" id="new_pdf_btn" class="btn btn-warning">Generar nuevo reporte</button>
+			<div class="card">
+				<div class="card-body text-dark">
+
+					<h2 class="mb-5">Exportar a PDF</h2>
+
+					<div style="width: 100%;" class="d-flex align-items-center justify-content-end my-4">
+						<button type="button" id="new_pdf_btn" class="btn btn-warning">Generar nuevo reporte</button>
+					</div>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Reporte</th>
+									<th scope="col">Fecha</th>
+									<th scope="col">Creador</th>
+								</tr>
+							</thead>
+							<tbody id="reports_table_body">
+								<% reports.forEach(report => { %>
+									<tr>
+										<td><a href="/pdf/<%= report.name %>"><%= report.name %></a></td>
+										<td><%= report.created_at %></td>
+										<td><%= report.username %></td>
+									</tr>
+								<% }) %>
+							</tbody>
+						</table>
+
+				</div>
 			</div>
-
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Reporte</th>
-							<th scope="col">Fecha</th>
-							<th scope="col">Creador</th>
-						</tr>
-					</thead>
-					<tbody id="reports_table_body">
-						<% reports.forEach(report => { %>
-							<tr>
-								<td><a href="/pdf/<%= report.name %>"><%= report.name %></a></td>
-								<td><%= report.created_at %></td>
-								<td><%= report.username %></td>
-							</tr>
-						<% }) %>
-					</tbody>
-				</table>
 		</main>
 
 		<footer>

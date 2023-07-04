@@ -14,69 +14,79 @@
 
 	<div class="container d-flex flex-column justify-content-between">
 	
-		<header>
+		<header class="text-dark">
 			    <%- include('../partials/header'); %>
 		</header>
 
-		<main class="content text-center text-left">
+			<div class="card">
+				<div class="card-body">
 
-			<%- include('../partials/alerts') %>
+					<main class="content text-center text-left">
 
-			<div class="top_table d-flex justify-content-between align-items-center mt-5 mb-3">
-				<p>Precio del dolar: 1$ = <%= dolar_price.value %>Bs.f</p>
+						<%- include('../partials/alerts') %>
 
-				<div class="btn-group">
-					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Opciones
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="/member/grafica">Grafica</a>
-						<a class="dropdown-item" href="/member/add">Añadir Nuevo</a>
-						<a class="dropdown-item" href="/member/exportpdf">Exportar a PDF</a>
-					</div>
+
+
+
+
+						<div class="top_table text-dark d-flex justify-content-between align-items-center mt-5 mb-3">
+							<p>Precio del dolar: 1$ = <%= dolar_price.value %>Bs.f</p>
+
+							<div class="btn-group">
+								<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Opciones
+								</button>
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="/member/grafica">Grafica</a>
+									<a class="dropdown-item" href="/member/add">Añadir Nuevo</a>
+									<a class="dropdown-item" href="/member/exportpdf">Exportar a PDF</a>
+								</div>
+							</div>
+						</div>
+
+						<table class="table text-left text-dark">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Nombre</th>
+									<th scope="col">Codigo de Barras</th>
+									<th scope="col">Cantidad</th>
+									<th scope="col">Precio Bolivares</th>
+									<th scope="col">Precio Dolares</th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% products.forEach(row => {  %>
+
+									<tr>
+										<th scope="row"><%= row.id %></th>
+										<td><%= row.name %></td>
+										<td><%= row.numero_barra %></td>
+										<td><%= row.amount %></td>
+										<td><%= row.precio %></td>
+										<td><%= row.price %></td>
+										<td>
+											<div class="dropdown">
+												<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													...
+												</button>
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<a class="dropdown-item" href="/member/delete/<%= row.id %>">Eliminar</a>
+													<a class="dropdown-item" href="/member/modificar/<%= row.id %>">Modificar</a>
+												</div>
+											</div>
+										</td>
+									</tr>
+
+								<% }) %>
+							</tbody>
+						</table>
+
+					</main>
+
 				</div>
 			</div>
-
-			<table class="table text-left">
-				<thead>
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Nombre</th>
-						<th scope="col">Codigo de Barras</th>
-						<th scope="col">Cantidad</th>
-						<th scope="col">Precio Bolivares</th>
-						<th scope="col">Precio Dolares</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<% products.forEach(row => {  %>
-
-						<tr>
-							<th scope="row"><%= row.id %></th>
-							<td><%= row.name %></td>
-							<td><%= row.numero_barra %></td>
-							<td><%= row.amount %></td>
-							<td><%= row.precio %></td>
-							<td><%= row.price %></td>
-							<td>
-								<div class="dropdown">
-									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										...
-									</button>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<a class="dropdown-item" href="/member/delete/<%= row.id %>">Eliminar</a>
-										<a class="dropdown-item" href="/member/modificar/<%= row.id %>">Modificar</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-
-					<% }) %>
-				</tbody>
-			</table>
-
-		</main>
 
 		<footer>
 			    <%- include('../partials/footer'); %>
